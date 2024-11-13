@@ -37,13 +37,14 @@ boundary_cimg <- function (x3p_path, mask_path, downsample_m, color="W"){
 #' @description
 #' A helper function to determine the number of pixels in highlight regions
 #'
-#' @param cimg A cimg from boundary_cimg output
+#' @param bound_cimg A cimg from boundary_cimg output
 #' @param maxY maximum???
 #' @param px number of pixels
 #'
 #' @importFrom imager highlight fill
 #' @export
-outRegion <- function(boundary_cimg, maxY=1.5, px = NA){
+
+outRegion <- function(bound_cimg, maxY=1.5, px = NA){
   numElement <- function(element){
     max(lengths(element))
   }
@@ -52,13 +53,13 @@ outRegion <- function(boundary_cimg, maxY=1.5, px = NA){
     px = 1
     find = 0
     while (find == 0 & px <=5) {
-      highlight = boundary_cimg %>% fill(px) %>% highlight
+      highlight = bound_cimg %>% fill(px) %>% highlight
       numHighlights = sapply(highlight, numElement)
       # The top 2 number of pixels of highlight regions
       numMax = sort(numHighlights, decreasing = TRUE)[1:3]
 
-      if (sum(numMax > dim(boundary_cimg)[2])==2){# top 2 has all y axis covered
-        if (sum(numMax[1:2] <= maxY*dim(cimg)[2]) <= 2){
+      if (sum(numMax > dim(bound_cimg)[2])==2){# top 2 has all y axis covered
+        if (sum(numMax[1:2] <= maxY*dim(bound_cimg)[2]) <= 2){
           ms = order(numHighlights, decreasing = TRUE)[1:2]
           find = 1
           h1 = highlight[[ms[1]]]
@@ -76,7 +77,7 @@ outRegion <- function(boundary_cimg, maxY=1.5, px = NA){
 
   else{
     find=1
-    highlight = boundary_cimg %>% fill(px) %>% highlight
+    highlight = bound_cimg %>% fill(px) %>% highlight
     numHighlights = sapply(highlight, numElement)
     # The top 2 number of pixels of highlight regions
     numMax = sort(numHighlights, decreasing = TRUE)[1:3]
@@ -86,7 +87,7 @@ outRegion <- function(boundary_cimg, maxY=1.5, px = NA){
   }
 
   if(find==1){
-    plot(boundary_cimg)
+    plot(bound_cimg)
     with(h1, lines(x,y, col='red', lwd=2))
     with(h2, lines(x,y, col='blue', lwd=2))
     return(list(px=px, h1=data.frame(h1$x, h1$y), h2=data.frame(h2$x, h2$y)))}
@@ -98,7 +99,6 @@ outRegion <- function(boundary_cimg, maxY=1.5, px = NA){
 
 #' Create Alpha hull to identify grooves
 #'
-#' @desc
 #'
 #' @param boundaryW boundary_cimg in white mode
 #' @param outRegionBoundary one set of the boundary points from outRegion function
@@ -107,6 +107,8 @@ outRegion <- function(boundary_cimg, maxY=1.5, px = NA){
 #' @param hullCol color to display the hull
 #'
 #' @importFrom alphahull ahull
+#' @importFrom graphics points
+#' @importFrom stats runif
 #'
 #' @export
 
