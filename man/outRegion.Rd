@@ -4,14 +4,14 @@
 \alias{outRegion}
 \title{Find highlighted regions}
 \usage{
-outRegion(boundary_cimg, maxY = 1.5, px = NA)
+outRegion(bound_cimg, maxY = 1.5, px = NA)
 }
 \arguments{
+\item{bound_cimg}{A cimg from boundary_cimg output}
+
 \item{maxY}{maximum???}
 
 \item{px}{number of pixels}
-
-\item{cimg}{A cimg from boundary_cimg output}
 }
 \description{
 A helper function to determine the number of pixels in highlight regions

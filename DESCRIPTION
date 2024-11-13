@@ -18,4 +18,5 @@ Imports:
   magrittr,
   x3ptools,
   png,
-  imager
+  imager,
+  alphahull
